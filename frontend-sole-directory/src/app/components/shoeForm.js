@@ -2,6 +2,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import axios from "axios";
+import { useEffect } from "react";
 
 const shoeSchema = yup.object({
   shoeName: yup.string().required("Shoe name is required."),
@@ -18,14 +20,33 @@ function ShoeForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isValid, isSubmitSuccessful },
   } = useForm({
     resolver: yupResolver(shoeSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  //can an successful add message be displayed when this happens
+  useEffect(() => {
+    reset();
+  }, [isSubmitSuccessful, reset]);
+
+  const onSubmit = async (data) => {
+    const shoeData = {
+      shoeName: data.shoeName,
+      shoeColor: data.shoeColor,
+      quantity: data.quantity,
+    };
+    console.log("Attempting to submit:", shoeData);
+    try {
+      const response = await axios.post("/api/shoes/submit-form", shoeData);
+      console.log("Shoe data submitted successfully", response.data);
+    } catch (error) {
+      console.log("Error submitting form data:", error);
+    }
   };
+
+  console.log("isValid", isValid);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-container">
@@ -54,3 +75,6 @@ function ShoeForm() {
 }
 
 export default ShoeForm;
+
+// should clear the form after form submission
+// should add a success message
