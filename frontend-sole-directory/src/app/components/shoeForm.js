@@ -60,8 +60,9 @@ function ShoeForm() {
         {errors.shoeName && <p>{errors.shoeName.message}</p>}
       </div>
       <div>
-        <label htmlFor="colorTheme">Shoe Color:</label>
-        <input {...register("colorTheme")} name="colorTheme" />
+        <label htmlFor="shoeColor">Shoe Color:</label>
+        <input {...register("shoeColor")} name="shoeColor" />
+        {errors.shoeColor && <p>{errors.shoeColor.message}</p>}
       </div>
       <div>
         <label htmlFor="quantity">Quantity</label>
